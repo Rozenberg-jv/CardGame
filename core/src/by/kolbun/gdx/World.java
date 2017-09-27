@@ -1,5 +1,7 @@
 package by.kolbun.gdx;
 
+import by.kolbun.gdx.logic.cards.TrophyCard;
+import by.kolbun.gdx.logic.cards.TrophyType;
 import by.kolbun.gdx.logic.deck.Deck;
 import by.kolbun.gdx.logic.player.Player;
 import by.kolbun.gdx.logic.towns.Town;
@@ -15,7 +17,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 // удалить методы draw() в группах
 // заменить спрайты в актерах на TextureRegion
-//@TODO обработка нажатий и перетаскивание
+// обработка нажатий и перетаскивание
 
 public class World extends Stage {
     private final int playersCount;
@@ -78,6 +80,7 @@ public class World extends Stage {
     private void dealCards() {
         initialDeck.shuffle();
         deck = new Deck(initialDeck);
+
         Town tmpTown;
         for (Actor twn : townTable.getChildren()) {
             tmpTown = (Town) twn;
@@ -142,10 +145,11 @@ public class World extends Stage {
                 + ") actor: " + (draggedActor == null ? "NONE" : draggedActor.toString()));
 
 
-
-        /*if (screenX < 100 && screenY < 60) {
-            townTable.putCard(currentPlayer.getHand().getCards().getRandomCard(), (Town)townTable.getChildren().get(0));
-        }//debug*/
+        if (screenX < 30 && screenY < 30) {
+//            townTable.putCard(currentPlayer.getHand().getCards().getRandomCard(), (Town)townTable.getChildren().get(0));
+            ((Town) townTable.getChildren().get(0)).addUnder(new TrophyCard(TrophyType.MONEY0, TownType.NUL,
+                    ress.priceCardTest, ress.cardBack));
+        }//debug
 
         return true;
     }

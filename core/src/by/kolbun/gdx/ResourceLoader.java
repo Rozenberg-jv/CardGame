@@ -35,8 +35,6 @@ public class ResourceLoader {
         else return rs;
     }
 
-
-    //@TODO рассмотреть поближе TextureAtlas.createSprites()
     public boolean loadGraphicResources() {
         TextureAtlas atlas = new TextureAtlas("atlas.atlas");
 

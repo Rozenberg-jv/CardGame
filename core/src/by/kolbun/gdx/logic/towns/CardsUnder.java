@@ -16,7 +16,7 @@ public class CardsUnder extends Group {
         xPos = _xPos;
         number = 0;
         this.setName(">Under");
-        this.setTouchable(Touchable.childrenOnly);
+//        this.setTouchable(Touchable.childrenOnly);
     }
 
     public void add(TrophyCard card) {

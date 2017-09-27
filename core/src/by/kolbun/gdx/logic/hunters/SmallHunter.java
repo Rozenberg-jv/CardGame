@@ -1,5 +1,6 @@
 package by.kolbun.gdx.logic.hunters;
 
+import by.kolbun.gdx.logic.DraggHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -16,7 +17,9 @@ public class SmallHunter extends Actor {
         texture = _texture;
         this.setBounds(0, 0, 30, 30);
 
-        this.addListener(new InputListener() {
+
+        this.addListener(new DraggHandler());
+        /*this.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.app.log(getName(), "touchDown() x:" + x + ", y:" + y);
@@ -25,7 +28,7 @@ public class SmallHunter extends Actor {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.log(getName(), "touchUp()");
+//                Gdx.app.log(getName(), "touchUp()");
             }
 
             Vector2 nPos;
@@ -37,7 +40,7 @@ public class SmallHunter extends Actor {
 //                Gdx.app.log("BigHunter", "touchDragged() x:" + x + ", y:" + y);
 //                Gdx.app.log("BigHunter", "current " + localToStageCoordinates(new Vector2(x, y)).toString());
             }
-        });
+        });*/
     }
 
 

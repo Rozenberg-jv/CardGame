@@ -14,12 +14,12 @@ public class CardsHand extends Group {
         this.setName(">CardsHand");
     }
 
-    @Override
+    /*@Override
     public void draw(Batch batch, float parentAlpha) {
         for (Actor card : this.getChildren()) {
             card.draw(batch, parentAlpha);
         }
-    }
+    }*/
 
     //@TODO
     public TrophyCard getRandomCard() {

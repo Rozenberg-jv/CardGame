@@ -9,14 +9,12 @@ public class Hand extends Group {
     private CardsHand cards;
 
     Hand() {
+        this.setName(">Hand");
+
         bigHunters = new BigHuntersHand();
         smallHunters = new SmallHuntersHand();
         cards = new CardsHand();
-        this.setName(">Hand");
-        initHand();
-    }
 
-    private void initHand() {
         this.addActor(bigHunters);
         this.addActor(smallHunters);
         this.addActor(cards);
@@ -24,7 +22,6 @@ public class Hand extends Group {
 
 
     //gs
-
 
     public BigHuntersHand getBigHunters() {
         return bigHunters;
