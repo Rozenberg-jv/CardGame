@@ -30,7 +30,7 @@ public class World extends Stage {
     private Array<Player> players;
     private Array<Player> playersQueue;
     private Player currentPlayer;
-    private Actor draggedActor;
+    private Actor touchedActor;
 
     public World(Viewport _viewport, SpriteBatch _batch, int _playersCount, ResourceLoader _ress) {
         super(_viewport, _batch);
@@ -137,12 +137,12 @@ public class World extends Stage {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         super.touchDown(screenX, screenY, pointer, button);
-        draggedActor = hit(screenX, screenY, true);
-        if (draggedActor != null) {
-            draggedActor.toFront();
+        touchedActor = hit(screenX, screenY, true);
+        if (touchedActor != null) {
+            touchedActor.toFront();
         }
         Gdx.app.log("World", "touchDown() (" + screenX + "," + screenY
-                + ") actor: " + (draggedActor == null ? "NONE" : draggedActor.toString()));
+                + ") actor: " + (touchedActor == null ? "NONE" : touchedActor.getName()));
 
 
         if (screenX < 30 && screenY < 30) {
@@ -165,7 +165,7 @@ public class World extends Stage {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         super.touchUp(screenX, screenY, pointer, button);
 
-        draggedActor = null;
+        touchedActor = null;
 
         return true;
     }

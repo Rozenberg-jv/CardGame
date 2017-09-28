@@ -7,14 +7,18 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 
 public class TownTable extends Group {
 
+//    private final int[] xCoords = {};
+
     public TownTable() {
         this.setName(">TownTable");
         initTownTable();
     }
 
+    private Town tmpTown;
     private void initTownTable() {
         for (TownType type : TownType.values()) {
-            this.addActor(new Town(type, type.getX(), type.getTexture()));
+            tmpTown = new Town(type, type.getX(), type.getTexture());
+            this.addActor(tmpTown);
         }
     }
 
@@ -24,11 +28,6 @@ public class TownTable extends Group {
 
             _town.addUnder(_card);
         }
-    }
-
-    @Override
-    protected void drawChildren(Batch batch, float parentAlpha) {
-        super.drawChildren(batch, parentAlpha);
     }
 
     //gs

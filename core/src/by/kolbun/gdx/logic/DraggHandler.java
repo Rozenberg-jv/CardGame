@@ -29,7 +29,12 @@ public class DraggHandler extends InputListener {
     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
         current = event.getListenerActor();
 
-        Gdx.app.log(current.getName(), "touchDown() x:" + x + ", y:" + y);
+        Vector2 nPos;
+        nPos = event.getListenerActor().localToStageCoordinates(new Vector2(x, y));
+
+        Gdx.app.log(current.getName(), "touchDown(local) x:" + x + ", y:" + y);
+        Gdx.app.log(current.getName(), "touchDown(stage) x:" + nPos.x + ", y:" + nPos.y);
+
         return true;
     }
 

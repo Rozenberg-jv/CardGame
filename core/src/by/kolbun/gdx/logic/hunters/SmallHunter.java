@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 
-public class SmallHunter extends Actor {
+public class SmallHunter extends Hunter {
     private TextureRegion texture;
 
     public SmallHunter(TextureRegion _texture) {

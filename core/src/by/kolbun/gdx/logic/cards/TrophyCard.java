@@ -40,7 +40,8 @@ public class TrophyCard extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        batch.draw(texture, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        batch.draw(texture, getX(), getY(), getOriginX(), getOriginY(),
+                getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 
     //gs

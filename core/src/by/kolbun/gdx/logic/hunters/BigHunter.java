@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 
-public class BigHunter extends Actor {
+public class BigHunter extends Hunter {
     private TextureRegion texture;
 
     public BigHunter(TextureRegion _texture) {
