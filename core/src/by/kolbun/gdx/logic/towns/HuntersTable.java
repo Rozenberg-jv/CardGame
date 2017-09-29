@@ -4,10 +4,8 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 
 public class HuntersTable extends Group {
 
-    public HuntersTable(float x, float y) {
+    public HuntersTable() {
         this.setName(">HuntersTable");
-
-        this.setBounds(x, y, 60, 100);
     }
 
 

@@ -1,47 +1,35 @@
 package by.kolbun.gdx.logic.cards;
 
-import by.kolbun.gdx.logic.DraggHandler;
+import by.kolbun.gdx.logic.util.DragHandler;
+import by.kolbun.gdx.logic.GameActor;
 import by.kolbun.gdx.logic.towns.TownType;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 
-public class TrophyCard extends Actor {
+public class TrophyCard extends GameActor {
     private TrophyType trophyType;
     private TownType townType;
 
-    private TextureRegion texture;
     private TextureRegion front;
     private TextureRegion back;
 
     private boolean isShown;
 
     // не двигаются карты из руки
-    // @TODO не определяется карта под городом при нажатии
+    // не определяется карта под городом при нажатии
     // не определяется нажатие на карту в правом нижнем углу
 
     public TrophyCard(TrophyType trophy, TownType town, TextureRegion _front, TextureRegion _back) {
+        super(_front);
         trophyType = trophy;
         townType = town;
         front = _front;
         back = _back;
 
-        texture = front;
         this.setBounds(0, 0, 60, 100);
         this.setName(">TrophyCard:" + this.townType.toString() + ":" + this.trophyType.toString());
 
-        this.addListener(new DraggHandler());
+        this.addListener(new DragHandler());
 
-    }
-
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        batch.draw(texture, getX(), getY(), getOriginX(), getOriginY(),
-                getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 
     //gs

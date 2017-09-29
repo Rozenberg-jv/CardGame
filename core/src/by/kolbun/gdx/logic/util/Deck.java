@@ -1,4 +1,4 @@
-package by.kolbun.gdx.logic.deck;
+package by.kolbun.gdx.logic.util;
 
 import by.kolbun.gdx.ResourceLoader;
 import by.kolbun.gdx.logic.cards.TrophyCard;

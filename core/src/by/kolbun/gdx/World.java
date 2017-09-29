@@ -2,7 +2,7 @@ package by.kolbun.gdx;
 
 import by.kolbun.gdx.logic.cards.TrophyCard;
 import by.kolbun.gdx.logic.cards.TrophyType;
-import by.kolbun.gdx.logic.deck.Deck;
+import by.kolbun.gdx.logic.util.Deck;
 import by.kolbun.gdx.logic.player.Player;
 import by.kolbun.gdx.logic.towns.Town;
 import by.kolbun.gdx.logic.towns.TownTable;
@@ -56,10 +56,10 @@ public class World extends Stage {
         initialDeck = new Deck(playersCount);
         townTable = new TownTable();
         players = new Array<Player>();
-        players.add(new Player(true, "PlayerHuman"));
-        players.add(new Player(false, "PlayerRed(2)"));
-        players.add(new Player(false, "PlayerBlue(3)"));
-        players.add(new Player(false, "PlayerYellow(4)"));
+        players.add(new Player(true, "PlayerGreen"));
+        players.add(new Player(false, "PlayerRed"));
+        players.add(new Player(false, "PlayerBlue"));
+        players.add(new Player(false, "PlayerYellow"));
 
         playersQueue = new Array<Player>();
         playersQueue.addAll(players);

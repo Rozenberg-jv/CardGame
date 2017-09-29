@@ -8,11 +8,11 @@ public class Hand extends Group {
     private SmallHuntersHand smallHunters;
     private CardsHand cards;
 
-    Hand() {
+    Hand(String _parent) {
         this.setName(">Hand");
 
-        bigHunters = new BigHuntersHand();
-        smallHunters = new SmallHuntersHand();
+        bigHunters = new BigHuntersHand(_parent);
+        smallHunters = new SmallHuntersHand(_parent);
         cards = new CardsHand();
 
         this.addActor(bigHunters);

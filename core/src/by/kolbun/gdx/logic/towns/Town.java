@@ -1,5 +1,6 @@
 package by.kolbun.gdx.logic.towns;
 
+import by.kolbun.gdx.logic.cards.TownCard;
 import by.kolbun.gdx.logic.cards.TrophyCard;
 import by.kolbun.gdx.logic.hunters.Hunter;
 import com.badlogic.gdx.Gdx;
@@ -10,8 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 
-//@TODO
-
 /**
  * Town - группа, первой добавляется карта TownCard, рисуется всегда последней,
  * добавляются карты TrophyCard, пример см. CardsHand,
@@ -20,21 +19,25 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 
 public class Town extends Group {
     private TownType type;
-    private TextureRegion texture;
     private UnderTable under;
     private HuntersTable hunters;
+    private TownCard town;
 
-    Town(TownType _type, int _xPos, TextureRegion _texture) {
+    int xPos;
+
+    Town(TownType _type, int _x) {
         type = _type;
-        texture = _texture;
-//        this.setPosition(_xPos, 50);
-        this.setBounds(_xPos, 50, 60, 100);
         this.setName(">Town");
 
-        hunters = new HuntersTable(getX(), getY());
-        under = new UnderTable(getX(), getY());
+        xPos = _x;
+
+        hunters = new HuntersTable();
+        under = new UnderTable();
+        town = new TownCard(_type.getTexture(), _type.getX());
+
         this.addActor(hunters);
         this.addActor(under);
+        this.addActor(town);
     }
 
     public void addUnder(TrophyCard _card) {
@@ -43,7 +46,7 @@ public class Town extends Group {
             return;
         }
 
-        _card.setPosition(this.getX(), this.getY() + 20);
+        _card.setPosition(xPos, town.getY() + 20 * (under.getChildren().size + 1));
         under.addActor(_card);
     }
 
@@ -60,18 +63,8 @@ public class Town extends Group {
     }
 
     public void clear() {
-        this.clearChildren();
-    }
-
-    @Override
-    protected void drawChildren(Batch batch, float parentAlpha) {
-        //nothing - handle in draw() method
-    }
-
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        super.drawChildren(batch, parentAlpha);
-        batch.draw(texture, getX(), getY(), getWidth(), getHeight());
+        hunters.clear();
+        under.clear();
     }
 
 

@@ -10,7 +10,7 @@ public class Player extends Group {
     public Player(boolean isHuman, String _name) {
         this.isHuman = isHuman;
         this.setName(_name);
-        this.hand = new Hand();
+        this.hand = new Hand(_name);
 
         this.addActor(hand);
     }

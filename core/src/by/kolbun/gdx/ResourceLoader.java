@@ -3,6 +3,7 @@ package by.kolbun.gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Array;
 
 public class ResourceLoader {
 
@@ -20,8 +21,21 @@ public class ResourceLoader {
     public TextureRegion cardBack;
     public TextureRegion priceCardTest;
 
-    public TextureRegion bigHunter;
-    public TextureRegion smallHunter;
+    public TextureRegion bigHuntRed;
+    public TextureRegion bigHuntGreen;
+    public TextureRegion bigHuntYellow;
+    public TextureRegion bigHuntBlue;
+
+    public TextureRegion smallHuntRed;
+    public TextureRegion smallHuntGreen;
+    public TextureRegion smallHuntYellow;
+    public TextureRegion smallHuntBlue;
+
+//    public Array<TextureRegion> bigHuntersTx;
+//    public Array<TextureRegion> smallHuntersTx;
+
+//    public TextureRegion bigHunter;
+//    public TextureRegion smallHunter;
 
     //singleton
     private ResourceLoader() {
@@ -64,10 +78,16 @@ public class ResourceLoader {
         cardBack = atlas.findRegion("card_back");
         cardBack.flip(false, true);
 
-        bigHunter = atlas.findRegion("big_hunter");
-        bigHunter.flip(false, true);
-        smallHunter = atlas.findRegion("small_hunter");
-        smallHunter.flip(false, true);
+
+        bigHuntRed = atlas.findRegion("impBg_red");
+        bigHuntGreen = atlas.findRegion("impBg_green");
+        bigHuntYellow = atlas.findRegion("impBg_yellow");
+        bigHuntBlue = atlas.findRegion("impBg_blue");
+
+        smallHuntRed = atlas.findRegion("impSm_red");
+        smallHuntGreen = atlas.findRegion("impSm_green");
+        smallHuntYellow = atlas.findRegion("impSm_yellow");
+        smallHuntBlue = atlas.findRegion("impSm_blue");
 
         return true;
     }
