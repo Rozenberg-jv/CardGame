@@ -40,14 +40,15 @@ public class Town extends Group {
         this.addActor(town);
     }
 
-    public void addUnder(TrophyCard _card) {
+    public boolean addUnder(TrophyCard _card) {
         if (_card.getTownType() != this.getType()) {
             Gdx.app.log(this.getName(), "Попытка сброса карты под несоответствующий тип города.");
-            return;
+            return false;
         }
 
         _card.setPosition(xPos, town.getY() + 20 * (under.getChildren().size + 1));
         under.addActor(_card);
+        return true;
     }
 
     public void addHunter(Hunter _hunter) {

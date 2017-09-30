@@ -12,10 +12,11 @@ public class UnderTable extends Group {
     }
 
     @Override
-    protected void drawChildren(Batch batch, float parentAlpha) {
-        for (int i = this.getChildren().size - 1; i >= 0; i--) {
-            this.getChildren().get(i).draw(batch, parentAlpha);
-        }
+    public void addActor(Actor actor) {
+        super.addActorAt(0, actor);
     }
+
+// TODO: 30.09.2017 внести смену листнера в метод addUnder + на этапе инициализации
+
 
 }

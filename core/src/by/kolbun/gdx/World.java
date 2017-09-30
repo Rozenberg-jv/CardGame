@@ -170,6 +170,10 @@ public class World extends Stage {
         return true;
     }
 
+    public TownTable getTownTable() {
+        return townTable;
+    }
+
     //GAME_METHODS
 
 }
