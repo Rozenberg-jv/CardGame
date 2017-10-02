@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class BigHunter extends Hunter {
 
-    public BigHunter(TextureRegion _texture) {
-        super(_texture);
+    public BigHunter(TextureRegion _texture, TextureRegion _back) {
+        super(_texture, _back);
         this.setBounds(0, 0, 40, 40);
 
     }

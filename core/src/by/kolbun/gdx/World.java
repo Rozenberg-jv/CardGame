@@ -138,18 +138,16 @@ public class World extends Stage {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         super.touchDown(screenX, screenY, pointer, button);
         touchedActor = hit(screenX, screenY, true);
-        if (touchedActor != null) {
-            touchedActor.toFront();
-        }
+
         Gdx.app.log("World", "touchDown() (" + screenX + "," + screenY
                 + ") actor: " + (touchedActor == null ? "NONE" : touchedActor.getName()));
 
 
-        if (screenX < 30 && screenY < 30) {
+        /*if (screenX < 30 && screenY < 30) {
 //            townTable.putCard(currentPlayer.getHand().getCards().getRandomCard(), (Town)townTable.getChildren().get(0));
             ((Town) townTable.getChildren().get(0)).addUnder(new TrophyCard(TrophyType.MONEY0, TownType.NUL,
                     ress.priceCardTest, ress.cardBack));
-        }//debug
+        }//debug*/
 
         return true;
     }
@@ -168,10 +166,6 @@ public class World extends Stage {
         touchedActor = null;
 
         return true;
-    }
-
-    public TownTable getTownTable() {
-        return townTable;
     }
 
     //GAME_METHODS

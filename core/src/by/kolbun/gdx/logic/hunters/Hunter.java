@@ -6,9 +6,22 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Hunter extends GameActor {
 
-    public Hunter(TextureRegion _texture) {
+    private TextureRegion front;
+    private TextureRegion back;
+
+    public Hunter(TextureRegion _texture, TextureRegion _back) {
         super(_texture);
+        front = _texture;
+        back = _back;
         this.addListener(new DragHandler());
     }
 
+
+    public void toggleTexture() {
+        if (texture == front) {
+            texture = back;
+        } else {
+            texture = front;
+        }
+    }
 }

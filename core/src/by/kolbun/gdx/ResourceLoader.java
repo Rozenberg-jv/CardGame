@@ -31,6 +31,11 @@ public class ResourceLoader {
     public TextureRegion smallHuntYellow;
     public TextureRegion smallHuntBlue;
 
+    public TextureRegion huntPointRed;
+    public TextureRegion huntPointGreen;
+    public TextureRegion huntPointYellow;
+    public TextureRegion huntPointBlue;
+
 //    public Array<TextureRegion> bigHuntersTx;
 //    public Array<TextureRegion> smallHuntersTx;
 
@@ -88,6 +93,11 @@ public class ResourceLoader {
         smallHuntGreen = atlas.findRegion("impSm_green");
         smallHuntYellow = atlas.findRegion("impSm_yellow");
         smallHuntBlue = atlas.findRegion("impSm_blue");
+
+        huntPointRed = atlas.findRegion("hunt_point_red");
+        huntPointGreen = atlas.findRegion("hunt_point_green");
+        huntPointYellow = atlas.findRegion("hunt_point_yellow");
+        huntPointBlue = atlas.findRegion("hunt_point_blue");
 
         return true;
     }

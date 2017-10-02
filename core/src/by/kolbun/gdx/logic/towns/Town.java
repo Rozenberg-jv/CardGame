@@ -3,6 +3,7 @@ package by.kolbun.gdx.logic.towns;
 import by.kolbun.gdx.logic.cards.TownCard;
 import by.kolbun.gdx.logic.cards.TrophyCard;
 import by.kolbun.gdx.logic.hunters.Hunter;
+import by.kolbun.gdx.logic.util.ZoomClickHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -19,11 +20,12 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 
 public class Town extends Group {
     private TownType type;
+
     private UnderTable under;
     private HuntersTable hunters;
     private TownCard town;
 
-    int xPos;
+    private int xPos;
 
     Town(TownType _type, int _x) {
         type = _type;
@@ -32,12 +34,12 @@ public class Town extends Group {
         xPos = _x;
 
         hunters = new HuntersTable();
-        under = new UnderTable();
         town = new TownCard(_type.getTexture(), _type.getX());
+        under = new UnderTable();
 
-        this.addActor(hunters);
         this.addActor(under);
         this.addActor(town);
+        this.addActor(hunters);
     }
 
     public boolean addUnder(TrophyCard _card) {
@@ -46,8 +48,9 @@ public class Town extends Group {
             return false;
         }
 
-        _card.setPosition(xPos, town.getY() + 20 * (under.getChildren().size + 1));
-        under.addActor(_card);
+        under.addActor(_card, xPos, town.getY());
+        _card.clearListeners();
+        _card.addListener(new ZoomClickHandler());
         return true;
     }
 
@@ -55,6 +58,9 @@ public class Town extends Group {
         if (!isHunterAddValid(_hunter)) return;
 
         hunters.addActor(_hunter);
+
+        _hunter.clearListeners();
+        _hunter.addListener(new ZoomClickHandler());
     }
 
     private boolean isHunterAddValid(Hunter _hunter) {
@@ -68,11 +74,23 @@ public class Town extends Group {
         under.clear();
     }
 
+/*
+    @Override
+    protected void drawChildren(Batch batch, float parentAlpha) {
+        under.draw(batch, parentAlpha);
+        town.draw(batch);
+    }
+*/
+
 
     //gs
 
     public TownType getType() {
         return type;
+    }
+
+    public int getXPos() {
+        return xPos;
     }
 
 }

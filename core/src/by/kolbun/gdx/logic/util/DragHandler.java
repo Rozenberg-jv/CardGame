@@ -2,6 +2,7 @@ package by.kolbun.gdx.logic.util;
 
 import by.kolbun.gdx.logic.cards.TownCard;
 import by.kolbun.gdx.logic.cards.TrophyCard;
+import by.kolbun.gdx.logic.hunters.Hunter;
 import by.kolbun.gdx.logic.towns.Town;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
@@ -18,6 +19,7 @@ public class DragHandler extends DragListener {
     @Override
     public void dragStart(InputEvent event, float x, float y, int pointer) {
         current = event.getListenerActor();
+        current.toFront();
         current.setTouchable(Touchable.disabled);
         startPos = new Vector2(current.getX(), current.getY());
     }
@@ -32,35 +34,37 @@ public class DragHandler extends DragListener {
     public void dragStop(InputEvent event, float x, float y, int pointer) {
         droppedOn = event.getStage().hit(nPos.x, nPos.y, true);
 
-        if (droppedOn != null && droppedOn instanceof TownCard && current instanceof TrophyCard) {
-            Gdx.app.log(event.getListenerActor().getName(), "dragStop() on " + droppedOn.getName());
-            Town droppedOnTown = (Town) droppedOn.getParent();
-
-            if (!droppedOnTown.addUnder((TrophyCard) current)) {
-                current.setPosition(startPos.x, startPos.y);
-            } else {
-                current.clearListeners();
-                current.addListener(new ZoomClickHandler());
+        if (droppedOn instanceof TownCard) {
+            if (current instanceof TrophyCard) {
+                dropTrophy();
+            } else if (current instanceof Hunter) {
+                dropHunter();
             }
+        } else {
+            current.setPosition(startPos.x, startPos.y);
         }
+
         current.setTouchable(Touchable.enabled);
     }
 
-    private int getDroppedOnTownActor(float x) {
-        /*if (x > 200 && x < 260) return 0;
-        else if (x > 270 && x < 330) return 1;
-        else if (x > 340 && x < 400) return 2;
-        else if (x > 410 && x < 470) return 3;
-        else if (x > 480 && x < 540) return 4;
-        else if (x > 550 && x < 610) return 5;
-        else if (x > 620 && x < 680) return 6;
-        else if (x > 690 && x < 750) return 7;*/
+    private void dropTrophy() {
+        Gdx.app.log(current.getName(), "dragStop() on " + droppedOn.getName());
 
-        return (int) ((x - 200) / 70);
+        if (((Town) droppedOn.getParent()).addUnder((TrophyCard) current)) {
+
+        } else {
+            current.setPosition(startPos.x, startPos.y);
+        }
+    }
+
+    private void dropHunter() {
+        Gdx.app.log(current.getName(), "dragStop() on " + droppedOn.getName());
+
+        ((Town) droppedOn.getParent()).addHunter((Hunter) current);
     }
 
     //TODO: дроп хантеров и их размещение
-    //TODO: очередность и доступность клика андер-карт
+    //очередность и доступность клика андер-карт
     // TODO: валидация дропа хантеров по правилам
 
 }

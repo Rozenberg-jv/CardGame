@@ -11,8 +11,8 @@ public class TownTable extends Group {
         initTownTable();
     }
 
-    private Town tmpTown;
     private void initTownTable() {
+        Town tmpTown;
         for (TownType type : TownType.values()) {
             tmpTown = new Town(type, type.getX());
             this.addActor(tmpTown);
