@@ -36,12 +36,6 @@ public class ResourceLoader {
     public TextureRegion huntPointYellow;
     public TextureRegion huntPointBlue;
 
-//    public Array<TextureRegion> bigHuntersTx;
-//    public Array<TextureRegion> smallHuntersTx;
-
-//    public TextureRegion bigHunter;
-//    public TextureRegion smallHunter;
-
     //singleton
     private ResourceLoader() {
         rs = this;

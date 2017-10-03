@@ -34,4 +34,13 @@ public class Hand extends Group {
     public CardsHand getCards() {
         return cards;
     }
+
+    public int getFreeHuntersCount() {
+        int i = 0;
+
+        i += bigHunters.getChildren().size;
+        i += smallHunters.getChildren().size;
+
+        return i;
+    }
 }

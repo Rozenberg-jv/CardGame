@@ -50,9 +50,7 @@ public class DragHandler extends DragListener {
     private void dropTrophy() {
         Gdx.app.log(current.getName(), "dragStop() on " + droppedOn.getName());
 
-        if (((Town) droppedOn.getParent()).addUnder((TrophyCard) current)) {
-
-        } else {
+        if (!((Town) droppedOn.getParent()).addUnder((TrophyCard) current)) {
             current.setPosition(startPos.x, startPos.y);
         }
     }

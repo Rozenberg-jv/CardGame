@@ -1,16 +1,17 @@
 package by.kolbun.gdx.logic.towns;
 
+import by.kolbun.gdx.World;
 import by.kolbun.gdx.logic.cards.TownCard;
 import by.kolbun.gdx.logic.cards.TrophyCard;
 import by.kolbun.gdx.logic.hunters.Hunter;
+import by.kolbun.gdx.logic.player.OwnerType;
+import by.kolbun.gdx.logic.player.Player;
 import by.kolbun.gdx.logic.util.ZoomClickHandler;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
+
+import java.util.Map;
+
 
 /**
  * Town - группа, первой добавляется карта TownCard, рисуется всегда последней,
@@ -27,6 +28,8 @@ public class Town extends Group {
 
     private int xPos;
 
+    private Player currentPlayer;
+
     Town(TownType _type, int _x) {
         type = _type;
         this.setName(">Town");
@@ -40,6 +43,7 @@ public class Town extends Group {
         this.addActor(under);
         this.addActor(town);
         this.addActor(hunters);
+
     }
 
     public boolean addUnder(TrophyCard _card) {
@@ -54,33 +58,58 @@ public class Town extends Group {
         return true;
     }
 
+    // TODO: 02.10.2017 добавлять хантеров столько, чтобы перекрыть чужих, если это возможно
+
+    /**
+     * переносим хантера
+     * если этот цвет макс - значит автодобавка 1
+     * если нет
+     * считаем цвет, который максимальный
+     * считаем сколько надо еще до преимущества (макс.друг.цвета - сколько уже есть этого цвета + 1)
+     */
     public void addHunter(Hunter _hunter) {
-        if (!isHunterAddValid(_hunter)) return;
+        int range = isHunterAddValid();
+        if (range <= 0) {
+            Gdx.app.log(this.getName(), "не хватает хантеров");
+        } else {
+            hunters.addMultipleActors(range, _hunter);
+        }
 
-        hunters.addActor(_hunter);
 
-        _hunter.clearListeners();
-        _hunter.addListener(new ZoomClickHandler());
+//        hunters.addActor(_hunter);
+//        _hunter.clearListeners();
+//        _hunter.addListener(new RecallHunterFromTownHandler());
+
     }
 
-    private boolean isHunterAddValid(Hunter _hunter) {
-        //@TODO проверка на соответствие правилам
+    // TODO: 02.10.2017 очищать листнер хантеров в городе при переходе хода
+    // TODO: 03.10.2017 хэндлер возврата хантеров по клику
+    // TODO: 03.10.2017 HUD хэндлер, кнопка перехода хода, меню, ...
 
-        return true;
+    // TODO: 03.10.2017 почему проверка в Town???
+    private int isHunterAddValid() {
+        currentPlayer = World.getInstance().getCurrentPlayer();
+        Map<OwnerType, Integer> mp = hunters.huntersCountByOwner();
+
+        int max1 = -1;
+        OwnerType maxOwner1 = currentPlayer.getOwner();
+        for (Map.Entry<OwnerType, Integer> ent : mp.entrySet()) {
+//            if (ent.getKey() == currentPlayer.getOwner()) continue;
+            if (ent.getValue() > max1) {
+                max1 = ent.getValue();
+                maxOwner1 = ent.getKey();
+            }
+        }
+
+        if (maxOwner1 == currentPlayer.getOwner()) return 1;
+        if (max1 + 1 - mp.get(currentPlayer.getOwner()) > currentPlayer.getHand().getFreeHuntersCount()) return -1;
+        else return (max1 + 1 - mp.get(currentPlayer.getOwner()));
     }
 
     public void clear() {
         hunters.clear();
         under.clear();
     }
-
-/*
-    @Override
-    protected void drawChildren(Batch batch, float parentAlpha) {
-        under.draw(batch, parentAlpha);
-        town.draw(batch);
-    }
-*/
 
 
     //gs

@@ -1,7 +1,7 @@
 package by.kolbun.gdx;
 
-import by.kolbun.gdx.logic.cards.TrophyCard;
-import by.kolbun.gdx.logic.cards.TrophyType;
+import static by.kolbun.gdx.logic.player.OwnerType.*;
+
 import by.kolbun.gdx.logic.util.Deck;
 import by.kolbun.gdx.logic.player.Player;
 import by.kolbun.gdx.logic.towns.Town;
@@ -20,6 +20,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 // обработка нажатий и перетаскивание
 
 public class World extends Stage {
+    private static World world;
+
     private final int playersCount;
 
     private ResourceLoader ress;
@@ -32,7 +34,7 @@ public class World extends Stage {
     private Player currentPlayer;
     private Actor touchedActor;
 
-    public World(Viewport _viewport, SpriteBatch _batch, int _playersCount, ResourceLoader _ress) {
+    private World(Viewport _viewport, SpriteBatch _batch, int _playersCount, ResourceLoader _ress) {
         super(_viewport, _batch);
         getBatch().setProjectionMatrix(getCamera().combined);
 
@@ -41,8 +43,17 @@ public class World extends Stage {
 
         ress.loadGraphicResources();
         initGameObjects();
+    }
 
+    public static World initInstance(Viewport _viewport, SpriteBatch _batch, int _playersCount, ResourceLoader _ress) {
+        if (world == null) {
+            world = new World(_viewport, _batch, _playersCount, _ress);
+        }
+        return world;
+    }
 
+    public static World getInstance() {
+        return world;
     }
 
     /**
@@ -56,10 +67,10 @@ public class World extends Stage {
         initialDeck = new Deck(playersCount);
         townTable = new TownTable();
         players = new Array<Player>();
-        players.add(new Player(true, "PlayerGreen"));
-        players.add(new Player(false, "PlayerRed"));
-        players.add(new Player(false, "PlayerBlue"));
-        players.add(new Player(false, "PlayerYellow"));
+        players.add(new Player(true, "PlayerGreen", GREEN));
+        players.add(new Player(false, "PlayerRed", RED));
+        players.add(new Player(false, "PlayerBlue", BLUE));
+        players.add(new Player(false, "PlayerYellow", YELLOW));
 
         playersQueue = new Array<Player>();
         playersQueue.addAll(players);
@@ -170,4 +181,12 @@ public class World extends Stage {
 
     //GAME_METHODS
 
+
+    public TownTable getTownTable() {
+        return townTable;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
 }

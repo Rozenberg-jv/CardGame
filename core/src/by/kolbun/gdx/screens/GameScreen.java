@@ -30,7 +30,7 @@ public class GameScreen implements Screen {
         camera.setToOrtho(true, w, h);
         batch = new SpriteBatch();
         resources = ResourceLoader.getLoader();
-        world = new World(new StretchViewport(worldWidth, worldHeight, camera), batch, playersCount, resources);
+        world = World.initInstance(new StretchViewport(worldWidth, worldHeight, camera), batch, playersCount, resources);
 
         Gdx.input.setInputProcessor(world);
     }

@@ -6,10 +6,12 @@ public class Player extends Group {
 
     private boolean isHuman;
     private Hand hand;
+    private OwnerType owner;
 
-    public Player(boolean isHuman, String _name) {
+    public Player(boolean isHuman, String _name, OwnerType _owner) {
         this.isHuman = isHuman;
         this.setName(_name);
+        owner = _owner;
         this.hand = new Hand(_name);
 
         this.addActor(hand);
@@ -25,4 +27,7 @@ public class Player extends Group {
         return hand;
     }
 
+    public OwnerType getOwner() {
+        return owner;
+    }
 }
