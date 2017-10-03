@@ -67,12 +67,14 @@ public class Town extends Group {
      * считаем цвет, который максимальный
      * считаем сколько надо еще до преимущества (макс.друг.цвета - сколько уже есть этого цвета + 1)
      */
-    public void addHunter(Hunter _hunter) {
+    public boolean addHunter(Hunter _hunter) {
         int range = isHunterAddValid();
         if (range <= 0) {
             Gdx.app.log(this.getName(), "не хватает хантеров");
+            return false;
         } else {
             hunters.addMultipleActors(range, _hunter);
+            return true;
         }
 
 

@@ -2,6 +2,8 @@ package by.kolbun.gdx;
 
 import static by.kolbun.gdx.logic.player.OwnerType.*;
 
+import by.kolbun.gdx.logic.hunters.SmallHunter;
+import by.kolbun.gdx.logic.player.OwnerType;
 import by.kolbun.gdx.logic.util.Deck;
 import by.kolbun.gdx.logic.player.Player;
 import by.kolbun.gdx.logic.towns.Town;
@@ -159,6 +161,13 @@ public class World extends Stage {
             ((Town) townTable.getChildren().get(0)).addUnder(new TrophyCard(TrophyType.MONEY0, TownType.NUL,
                     ress.priceCardTest, ress.cardBack));
         }//debug*/
+
+        if (screenX < 30 && screenY < 30) {
+            currentPlayer = players.get(1);
+            ((Town)townTable.getChildren().get(0)).addHunter(new SmallHunter(
+                    ress.smallHuntRed, ress.huntPointRed, OwnerType.RED));
+            currentPlayer = players.get(0);
+        }//debug - добавляет хантеров в 0-город от красного игрока
 
         return true;
     }

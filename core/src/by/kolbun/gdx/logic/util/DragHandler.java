@@ -33,32 +33,36 @@ public class DragHandler extends DragListener {
     @Override
     public void dragStop(InputEvent event, float x, float y, int pointer) {
         droppedOn = event.getStage().hit(nPos.x, nPos.y, true);
-
+        boolean accept = false;
         if (droppedOn instanceof TownCard) {
             if (current instanceof TrophyCard) {
-                dropTrophy();
+                accept = dropTrophy();
             } else if (current instanceof Hunter) {
-                dropHunter();
+                accept = dropHunter();
             }
         } else {
             current.setPosition(startPos.x, startPos.y);
         }
+        if (!accept) current.setPosition(startPos.x, startPos.y);
+
 
         current.setTouchable(Touchable.enabled);
     }
 
-    private void dropTrophy() {
+    private boolean dropTrophy() {
         Gdx.app.log(current.getName(), "dragStop() on " + droppedOn.getName());
 
-        if (!((Town) droppedOn.getParent()).addUnder((TrophyCard) current)) {
+        /*if (!((Town) droppedOn.getParent()).addUnder((TrophyCard) current)) {
             current.setPosition(startPos.x, startPos.y);
-        }
+        }*/
+
+        return ((Town) droppedOn.getParent()).addUnder((TrophyCard) current);
     }
 
-    private void dropHunter() {
+    private boolean dropHunter() {
         Gdx.app.log(current.getName(), "dragStop() on " + droppedOn.getName());
 
-        ((Town) droppedOn.getParent()).addHunter((Hunter) current);
+        return ((Town) droppedOn.getParent()).addHunter((Hunter) current);
     }
 
     //TODO: дроп хантеров и их размещение

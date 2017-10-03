@@ -8,6 +8,7 @@ import by.kolbun.gdx.logic.player.SmallHuntersHand;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.HashMap;
@@ -33,7 +34,7 @@ public class HuntersTable extends Group {
 
         ((Hunter) _actor).toggleTexture();
         _actor.clearListeners();
-//        _actor.addListener(new RecallHunterHandler());
+        _actor.setTouchable(Touchable.disabled);
         _actor.setSize(10, 10);
 
         count++;
@@ -55,7 +56,7 @@ public class HuntersTable extends Group {
             if (bigHuntersHand.getChildren().size != 0) {
                 addActor(bigHuntersHand.getChildren().get(0));
             } else if (smallHuntersHand.getChildren().size != 0) {
-                addActor(bigHuntersHand.getChildren().get(0));
+                addActor(smallHuntersHand.getChildren().get(0));
             }
         }
     }
