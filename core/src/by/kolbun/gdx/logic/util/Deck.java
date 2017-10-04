@@ -3,6 +3,7 @@ package by.kolbun.gdx.logic.util;
 import by.kolbun.gdx.ResourceLoader;
 import by.kolbun.gdx.logic.cards.TrophyCard;
 import by.kolbun.gdx.logic.towns.TownType;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 
 import static by.kolbun.gdx.logic.cards.TrophyType.*;
@@ -12,12 +13,6 @@ public class Deck {
     private ResourceLoader ress;
 
     private Array<TrophyCard> deck;
-
-    public Deck(Deck origin) {
-        ress = ResourceLoader.getLoader();
-        deck = new Array<TrophyCard>();
-        deck.addAll(origin.getDeck());
-    }
 
     public Deck(int _playersCount) {
         ress = ResourceLoader.getLoader();
@@ -72,7 +67,6 @@ public class Deck {
         deck.shuffle();
     }
 
-
     //gs
 
     public TrophyCard getRandomByTown(TownType _town) {
@@ -87,11 +81,9 @@ public class Deck {
         return chosen;
     }
 
-    public Array<TrophyCard> getDeck() {
-        return deck;
-    }
-
     public TrophyCard popCard() {
-        return deck.pop();
+        TrophyCard result = deck.pop();
+        result.setShown(true);
+        return result;
     }
 }

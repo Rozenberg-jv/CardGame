@@ -30,9 +30,7 @@ public class GameScreen implements Screen {
         camera.setToOrtho(true, w, h);
         batch = new SpriteBatch();
         resources = ResourceLoader.getLoader();
-        world = World.initInstance(new StretchViewport(worldWidth, worldHeight, camera), batch, playersCount, resources);
 
-        Gdx.input.setInputProcessor(world);
     }
 
     /**
@@ -40,7 +38,11 @@ public class GameScreen implements Screen {
      */
     @Override
     public void show() {
+        world = World.initInstance(new StretchViewport(worldWidth, worldHeight, camera), batch, playersCount, resources);
 
+        Gdx.input.setInputProcessor(world);
+
+        world.startGame();
     }
 
     @Override

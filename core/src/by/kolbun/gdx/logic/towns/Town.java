@@ -47,26 +47,30 @@ public class Town extends Group {
     }
 
     public boolean addUnder(TrophyCard _card) {
+        currentPlayer = World.getInstance().getCurrentPlayer();
         if (_card.getTownType() != this.getType()) {
             Gdx.app.log(this.getName(), "Попытка сброса карты под несоответствующий тип города.");
             return false;
         }
 
-        under.addActor(_card, xPos, town.getY());
-        _card.clearListeners();
-        _card.addListener(new ZoomClickHandler());
+        if (currentPlayer != null && currentPlayer.isTurnDone()) {
+            Gdx.app.log(this.getName(), "Карта уже покладена");
+            return false;
+        }
+
+        addSimpleUnder(_card);
+
         return true;
     }
 
-    //02.10.2017 добавлять хантеров столько, чтобы перекрыть чужих, если это возможно
+    public void addSimpleUnder(TrophyCard _card) {
+        under.addActor(_card, xPos, town.getY());
+        _card.clearListeners();
+        _card.addListener(new ZoomClickHandler());
+    }
 
-    /**
-     * переносим хантера
-     * если этот цвет макс - значит автодобавка 1
-     * если нет
-     * считаем цвет, который максимальный
-     * считаем сколько надо еще до преимущества (макс.друг.цвета - сколько уже есть этого цвета + 1)
-     */
+    //02.10.2017 добавлять хантеров столько, чтобы перекрыть чужих, если это возможно //done 04.10.2017
+
     public boolean addHunter(Hunter _hunter) {
         int range = isHunterAddValid();
         if (range <= 0) {
@@ -85,7 +89,7 @@ public class Town extends Group {
     }
 
     // TODO: 02.10.2017 очищать листнер хантеров в городе при переходе хода
-    // TODO: 03.10.2017 хэндлер возврата хантеров по клику
+    // ??? 03.10.2017 хэндлер возврата хантеров по клику
     // TODO: 03.10.2017 HUD хэндлер, кнопка перехода хода, меню, ...
 
     // TODO: 03.10.2017 почему проверка в Town???
@@ -108,6 +112,7 @@ public class Town extends Group {
         else return (max1 + 1 - mp.get(currentPlayer.getOwner()));
     }
 
+    @Override
     public void clear() {
         hunters.clear();
         under.clear();

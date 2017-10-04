@@ -19,7 +19,7 @@ public class TrophyCard extends GameActor {
     // не определяется нажатие на карту в правом нижнем углу
 
     public TrophyCard(TrophyType trophy, TownType town, TextureRegion _front, TextureRegion _back) {
-        super(_front);
+        super(_back);
         trophyType = trophy;
         townType = town;
         front = _front;

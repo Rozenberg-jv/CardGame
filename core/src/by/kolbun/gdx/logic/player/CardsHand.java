@@ -19,4 +19,9 @@ public class CardsHand extends Group {
         _card.setShown(true);
         this.addActor(_card);
     }
+
+    public void resetNewRound() {
+        this.clear();
+        num = 0;
+    }
 }

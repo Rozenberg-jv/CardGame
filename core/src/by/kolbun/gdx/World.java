@@ -2,8 +2,6 @@ package by.kolbun.gdx;
 
 import static by.kolbun.gdx.logic.player.OwnerType.*;
 
-import by.kolbun.gdx.logic.hunters.SmallHunter;
-import by.kolbun.gdx.logic.player.OwnerType;
 import by.kolbun.gdx.logic.util.Deck;
 import by.kolbun.gdx.logic.player.Player;
 import by.kolbun.gdx.logic.towns.Town;
@@ -25,6 +23,7 @@ public class World extends Stage {
     private static World world;
 
     private final int playersCount;
+    private int gameTick;
 
     private ResourceLoader ress;
 
@@ -40,7 +39,8 @@ public class World extends Stage {
         super(_viewport, _batch);
         getBatch().setProjectionMatrix(getCamera().combined);
 
-        this.playersCount = _playersCount;
+        playersCount = _playersCount;
+        gameTick = 0;
         ress = _ress;
 
         ress.loadGraphicResources();
@@ -58,31 +58,19 @@ public class World extends Stage {
         return world;
     }
 
-    /**
-     * Initialize game objects
-     * initialDeck
-     * deck
-     * townTable
-     * players
-     */
     private void initGameObjects() {
-        initialDeck = new Deck(playersCount);
+//        initialDeck = new Deck(playersCount);
         townTable = new TownTable();
         players = new Array<Player>();
+        playersQueue = new Array<Player>();
         players.add(new Player(true, "PlayerGreen", GREEN));
         players.add(new Player(false, "PlayerRed", RED));
         players.add(new Player(false, "PlayerBlue", BLUE));
         players.add(new Player(false, "PlayerYellow", YELLOW));
 
-        playersQueue = new Array<Player>();
-        playersQueue.addAll(players);
-
-        currentPlayer = players.get(0);
-
         addActors();
 
-        dealCards();
-
+//        startGame();
     }
 
     /**
@@ -91,14 +79,14 @@ public class World extends Stage {
      * сдаем каждому игроку по 5 карт
      */
     private void dealCards() {
-        initialDeck.shuffle();
-        deck = new Deck(initialDeck);
+        deck = new Deck(playersCount);
+        deck.shuffle();
 
         Town tmpTown;
         for (Actor twn : townTable.getChildren()) {
             tmpTown = (Town) twn;
             if (tmpTown.getType() == TownType.CAP) continue;
-            tmpTown.addUnder(deck.getRandomByTown(tmpTown.getType()));
+            tmpTown.addSimpleUnder(deck.getRandomByTown(tmpTown.getType()));
         }
 
         for (Player player : players) {
@@ -116,9 +104,8 @@ public class World extends Stage {
      * @param delta time from last render
      */
     public void update(float delta) {
-        /*for (Actor actor : this.getActors()) {
-            //@TODO
-        }*/
+
+
     }
 
     /**
@@ -141,7 +128,75 @@ public class World extends Stage {
      */
     private void addActors() {
         this.addActor(townTable);
-        this.addActor(currentPlayer);
+        for (Player player : players)
+            this.addActor(player);
+    }
+
+
+    //GAME_FLOW
+
+    public void startGame() {
+        Gdx.app.log(this.getClass().getSimpleName(), "startGame()");
+        startRound();
+        //5th round
+    }
+
+    private void startRound() {
+        Gdx.app.log(this.getClass().getSimpleName(), "startRound()");
+
+        dealCards();
+        startCircle();
+    }
+
+    private void startCircle() {
+        if (AllCardHandsAreEmpty()) {
+            giveTrophies();
+            resetNewRound();
+            startRound();
+            return;
+        }
+
+        Gdx.app.log(this.getClass().getSimpleName(), "startCircle()");
+
+        playersQueue.addAll(players);
+        playersQueue.reverse();
+        for (Player player : playersQueue) {
+            player.setVisible(false);
+        }
+
+        startTurn();
+    }
+
+    private void startTurn() {
+        Gdx.app.log(this.getClass().getSimpleName(), "startTurn()");
+
+        if (currentPlayer != null)
+            currentPlayer.setVisible(false);
+        currentPlayer = playersQueue.pop();
+        currentPlayer.setVisible(true);
+        currentPlayer.setTurnDone(false);
+    }
+
+    private void endTurn() {
+        if (playersQueue.size == 0) {
+            startCircle();
+            return;
+        }
+
+        startTurn();
+    }
+
+    //game flow - utils
+
+    private void giveTrophies() {
+
+    }
+
+    private void resetNewRound() {
+        for (Player player : players) {
+            player.resetNewRound();
+        }
+        townTable.resetNewRound();
     }
 
 
@@ -160,14 +215,25 @@ public class World extends Stage {
 //            townTable.putCard(currentPlayer.getHand().getCards().getRandomCard(), (Town)townTable.getChildren().get(0));
             ((Town) townTable.getChildren().get(0)).addUnder(new TrophyCard(TrophyType.MONEY0, TownType.NUL,
                     ress.priceCardTest, ress.cardBack));
-        }//debug*/
+        }//debug - добавляет трофи-Money0 под город-0*/
 
-        if (screenX < 30 && screenY < 30) {
+        /*if (screenX < 30 && screenY < 30) {
             currentPlayer = players.get(1);
             ((Town)townTable.getChildren().get(0)).addHunter(new SmallHunter(
                     ress.smallHuntRed, ress.huntPointRed, OwnerType.RED));
             currentPlayer = players.get(0);
-        }//debug - добавляет хантеров в 0-город от красного игрока
+        }//debug - добавляет хантеров в 0-город от красного игрока*/
+
+        if (screenX > 770 && screenY > 450) {
+            if (!currentPlayer.isTurnDone()) {
+                Gdx.app.log("Game", "Вы не совершили действий, перенесите карту");
+            } else {
+                endTurn();
+            }
+
+//            endTurn();
+
+        } //debug - переход хода
 
         return true;
     }
@@ -197,5 +263,16 @@ public class World extends Stage {
 
     public Player getCurrentPlayer() {
         return currentPlayer;
+    }
+
+    public Array<Player> getPlayersQueue() {
+        return playersQueue;
+    }
+
+    private boolean AllCardHandsAreEmpty() {
+        for (Player player : players) {
+            if (player.getHand().getCards().hasChildren()) return false;
+        }
+        return true;
     }
 }

@@ -43,4 +43,10 @@ public class Hand extends Group {
 
         return i;
     }
+
+    public void resetNewRound() {
+        cards.resetNewRound();
+
+        // TODO: 05.10.2017 возврат только больших хантеров
+    }
 }

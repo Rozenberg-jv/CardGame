@@ -1,5 +1,6 @@
 package by.kolbun.gdx.logic.util;
 
+import by.kolbun.gdx.World;
 import by.kolbun.gdx.logic.cards.TownCard;
 import by.kolbun.gdx.logic.cards.TrophyCard;
 import by.kolbun.gdx.logic.hunters.Hunter;
@@ -33,17 +34,18 @@ public class DragHandler extends DragListener {
     @Override
     public void dragStop(InputEvent event, float x, float y, int pointer) {
         droppedOn = event.getStage().hit(nPos.x, nPos.y, true);
-        boolean accept = false;
+        boolean acceptDrop = false;
         if (droppedOn instanceof TownCard) {
             if (current instanceof TrophyCard) {
-                accept = dropTrophy();
+                acceptDrop = dropTrophy();
+                if (acceptDrop) World.getInstance().getCurrentPlayer().setTurnDone(true);
             } else if (current instanceof Hunter) {
-                accept = dropHunter();
+                acceptDrop = dropHunter();
             }
         } else {
             current.setPosition(startPos.x, startPos.y);
         }
-        if (!accept) current.setPosition(startPos.x, startPos.y);
+        if (!acceptDrop) current.setPosition(startPos.x, startPos.y);
 
 
         current.setTouchable(Touchable.enabled);
@@ -52,11 +54,9 @@ public class DragHandler extends DragListener {
     private boolean dropTrophy() {
         Gdx.app.log(current.getName(), "dragStop() on " + droppedOn.getName());
 
-        /*if (!((Town) droppedOn.getParent()).addUnder((TrophyCard) current)) {
-            current.setPosition(startPos.x, startPos.y);
-        }*/
+        boolean result = ((Town) droppedOn.getParent()).addUnder((TrophyCard) current);
 
-        return ((Town) droppedOn.getParent()).addUnder((TrophyCard) current);
+        return result;
     }
 
     private boolean dropHunter() {

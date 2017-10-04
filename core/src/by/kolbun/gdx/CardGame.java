@@ -7,6 +7,7 @@ public class CardGame extends Game {
 
     private GameScreen screen;
 
+
     @Override
     public void create() {
         screen = new GameScreen();
