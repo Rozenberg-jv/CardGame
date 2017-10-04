@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.SnapshotArray;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +32,7 @@ public class HuntersTable extends Group {
     @Override
     public void addActor(Actor _actor) {
         super.addActor(_actor);
+        sortChildren();
 
         ((Hunter) _actor).toggleTexture();
         _actor.clearListeners();
@@ -42,6 +44,17 @@ public class HuntersTable extends Group {
 
         for (int i = 0; i < this.getChildren().size; i++) {
             this.getChildren().get(i).setPosition(pos.get(i).x, pos.get(i).y);
+        }
+    }
+
+    private void sortChildren() {
+        SnapshotArray<Actor> a = this.getChildren();
+        for (int i = a.size - 1; i > 0; i--) {
+            for (int j = 0; j < i; j++) {
+                if (((Hunter) a.get(j)).getOwner().ordinal() > ((Hunter) a.get(j + 1)).getOwner().ordinal()) {
+                    this.swapActor(j, j + 1);
+                }
+            }
         }
     }
 
