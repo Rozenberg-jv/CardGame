@@ -1,6 +1,7 @@
 package by.kolbun.gdx.logic.towns;
 
 import by.kolbun.gdx.World;
+import by.kolbun.gdx.logic.hunters.BigHunter;
 import by.kolbun.gdx.logic.hunters.Hunter;
 import by.kolbun.gdx.logic.player.BigHuntersHand;
 import by.kolbun.gdx.logic.player.OwnerType;
@@ -91,7 +92,7 @@ public class HuntersTable extends Group {
 
     public Map<OwnerType, Integer> huntersCountByOwner() {
         OwnerType tmpOwner;
-        Map<OwnerType, Integer> map = new HashMap<>();
+        Map<OwnerType, Integer> map = new HashMap<OwnerType, Integer>();
         map.put(GREEN, 0);
         map.put(RED, 0);
         map.put(YELLOW, 0);
@@ -115,6 +116,20 @@ public class HuntersTable extends Group {
         }
 
         return map;
+    }
+
+    @Override
+    public void clear() {
+        super.clear();
+
+        for (Actor actor : this.getChildren()) {
+            if (actor instanceof BigHunter) {
+                BigHunter hnt = (BigHunter) actor;
+                hnt.sendBackToPlayer();
+            }
+        }
+
+        refresh();
     }
 
     public void refresh() {

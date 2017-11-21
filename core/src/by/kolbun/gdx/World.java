@@ -2,6 +2,7 @@ package by.kolbun.gdx;
 
 import static by.kolbun.gdx.logic.player.OwnerType.*;
 
+import by.kolbun.gdx.logic.player.OwnerType;
 import by.kolbun.gdx.logic.util.Deck;
 import by.kolbun.gdx.logic.player.Player;
 import by.kolbun.gdx.logic.towns.Town;
@@ -23,11 +24,9 @@ public class World extends Stage {
     private static World world;
 
     private final int playersCount;
-    private int gameTick;
 
     private ResourceLoader ress;
 
-    private Deck initialDeck;
     private Deck deck;
     private TownTable townTable;
     private Array<Player> players;
@@ -40,7 +39,6 @@ public class World extends Stage {
         getBatch().setProjectionMatrix(getCamera().combined);
 
         playersCount = _playersCount;
-        gameTick = 0;
         ress = _ress;
 
         ress.loadGraphicResources();
@@ -59,7 +57,6 @@ public class World extends Stage {
     }
 
     private void initGameObjects() {
-//        initialDeck = new Deck(playersCount);
         townTable = new TownTable();
         players = new Array<Player>();
         playersQueue = new Array<Player>();
@@ -123,15 +120,15 @@ public class World extends Stage {
 
     }
 
-    /**
-     * Adding actors to game World
-     */
     private void addActors() {
         this.addActor(townTable);
         for (Player player : players)
             this.addActor(player);
     }
 
+
+
+    /*-----------------------------------------------------------------------*/
 
     //GAME_FLOW
 
@@ -141,7 +138,12 @@ public class World extends Stage {
         //5th round
     }
 
+    private int roundsLeft = 5;
     private void startRound() {
+        if (roundsLeft-- == 0) {
+            endGame();
+        }
+
         Gdx.app.log(this.getClass().getSimpleName(), "startRound()");
 
         dealCards();
@@ -186,13 +188,21 @@ public class World extends Stage {
         startTurn();
     }
 
+    private void endGame() {
+        Gdx.app.log("GameFlow", "Game is done.");
+    }
+
     //game flow - utils
 
     private void giveTrophies() {
 
     }
 
+    // TODO: 07.10.2017 можно написать класс для очереди игроков, включить методы для удобства листания по кругу
     private void resetNewRound() {
+        players.insert(4, players.get(0));
+        players.removeIndex(0);
+
         for (Player player : players) {
             player.resetNewRound();
         }
@@ -206,9 +216,20 @@ public class World extends Stage {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         super.touchDown(screenX, screenY, pointer, button);
         touchedActor = hit(screenX, screenY, true);
-
+/*
+        StringBuilder sb = new StringBuilder();
+        Actor par = null;
+        if (touchedActor != null)
+            par = touchedActor.getParent();
+        sb.append(touchedActor.getName()).append("<");
+        while (par != null) {
+            sb.append(par.getName()).append("<");
+            par = par.getParent();
+        }*/
         Gdx.app.log("World", "touchDown() (" + screenX + "," + screenY
                 + ") actor: " + (touchedActor == null ? "NONE" : touchedActor.getName()));
+  /*      Gdx.app.log("World", "touchDown() (" + screenX + "," + screenY
+                + ") actor: " + sb.toString());*/
 
 
         /*if (screenX < 30 && screenY < 30) {
@@ -226,14 +247,19 @@ public class World extends Stage {
 
         if (screenX > 770 && screenY > 450) {
             if (!currentPlayer.isTurnDone()) {
-                Gdx.app.log("Game", "Вы не совершили действий, перенесите карту");
+                Gdx.app.log("Debug", "Вы не совершили действий, перенесите карту");
             } else {
                 endTurn();
             }
 
-//            endTurn();
-
         } //debug - переход хода
+
+        if (screenX < 30 && screenY > 450) {
+            Gdx.app.log("Debug", "Принудительное начало нового раунда");
+            resetNewRound();
+            startRound();
+
+        } //debug - новый раунд
 
         return true;
     }
@@ -256,6 +282,9 @@ public class World extends Stage {
 
     //GAME_METHODS
 
+    public String getName() {
+        return "World";
+    }
 
     public TownTable getTownTable() {
         return townTable;
@@ -275,4 +304,15 @@ public class World extends Stage {
         }
         return true;
     }
+
+    public Player getPlayerByOwner(OwnerType owner) {
+        for (Player player : players) {
+            if (player.getOwner() == owner) return player;
+        }
+        return null;
+    }
 }
+// наследовать класс от Actor и наследоваться от него всем актерам, которые draggable??
+// по примеру сделать для дургих draggable актеров.
+// дать имена всем группам-актерам вниз по иерархии
+// очередность прорисовки актеров -> Actor.toFront();

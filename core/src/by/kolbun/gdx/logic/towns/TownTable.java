@@ -29,13 +29,27 @@ public class TownTable extends Group {
         }
     }
 
+    /**
+     * чистит в Town: under, hunters
+     * меняет TownC со следующим
+     */
     public void resetNewRound() {
         SnapshotArray<Actor> a = this.getChildren();
         for (int i = 0; i < a.size; i++) {
-            a.get(i).clear();
-            /*if (((Town) a.get(i)).getType() == TownType.CAP) {
+            Town t = (Town) a.get(i);
+            t.clear();
+            if (t.getType() == TownType.CAP) {
+                int rX = t.getXPos();
+                t.setXPos(((Town) a.get(i + 1)).getXPos());
+                t.clear();
+
+                Town t2 = (Town) a.get(i + 1);
+                t2.setXPos(rX);
+                t2.clear();
+
                 this.swapActor(i, i + 1);
-            }*/
+                i++;
+            }
         }
     }
 

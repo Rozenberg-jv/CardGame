@@ -13,18 +13,12 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import java.util.Map;
 
 
-/**
- * Town - группа, первой добавляется карта TownCard, рисуется всегда последней,
- * добавляются карты TrophyCard, пример см. CardsHand,
- * реализовать х-координату, зависит от положения Town в массиве TownTable
- */
-
 public class Town extends Group {
     private TownType type;
 
     private UnderTable under;
     private HuntersTable hunters;
-    private TownCard town;
+    private TownCard townCard;
 
     private int xPos;
 
@@ -37,11 +31,11 @@ public class Town extends Group {
         xPos = _x;
 
         hunters = new HuntersTable();
-        town = new TownCard(_type.getTexture(), _type.getX());
+        townCard = new TownCard(_type.getTexture(), _type.getX(), _type);
         under = new UnderTable();
 
         this.addActor(under);
-        this.addActor(town);
+        this.addActor(townCard);
         this.addActor(hunters);
 
     }
@@ -64,7 +58,7 @@ public class Town extends Group {
     }
 
     public void addSimpleUnder(TrophyCard _card) {
-        under.addActor(_card, xPos, town.getY());
+        under.addActor(_card, xPos, townCard.getY());
         _card.clearListeners();
         _card.addListener(new ZoomClickHandler());
     }
@@ -92,7 +86,6 @@ public class Town extends Group {
     // ??? 03.10.2017 хэндлер возврата хантеров по клику
     // TODO: 03.10.2017 HUD хэндлер, кнопка перехода хода, меню, ...
 
-    // TODO: 03.10.2017 почему проверка в Town???
     private int isHunterAddValid() {
         currentPlayer = World.getInstance().getCurrentPlayer();
         Map<OwnerType, Integer> mp = hunters.huntersCountByOwner();
@@ -127,6 +120,12 @@ public class Town extends Group {
 
     public int getXPos() {
         return xPos;
+    }
+
+    public void setXPos(int _x) {
+        xPos = _x;
+        townCard.setX(_x);
+
     }
 
 }

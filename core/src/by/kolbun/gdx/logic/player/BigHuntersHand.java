@@ -2,12 +2,20 @@ package by.kolbun.gdx.logic.player;
 
 import by.kolbun.gdx.ResourceLoader;
 import by.kolbun.gdx.logic.hunters.BigHunter;
+import by.kolbun.gdx.logic.hunters.Hunter;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.SnapshotArray;
 
 import static by.kolbun.gdx.logic.player.OwnerType.*;
 
 public class BigHuntersHand extends Group {
+
+    private Array<Vector2> pos = new Array<Vector2>();
 
     public BigHuntersHand(String _parent) {
         setName("BigHuntersHand");
@@ -16,6 +24,7 @@ public class BigHuntersHand extends Group {
         TextureRegion texture;
         TextureRegion back;
         OwnerType owner;
+
 
         switch (_parent) {
             case "PlayerGreen":
@@ -48,16 +57,33 @@ public class BigHuntersHand extends Group {
 
         for (int i = 0; i < 6; i++) {
             newHunter = new BigHunter(texture, back, owner);
-            newHunter.setPosition(i * 50 + 20, 420);
+//            newHunter.setPosition(i * 50 + 20, 420);
             newHunter.setName("bigHunter#" + i);
             this.addActor(newHunter);
         }
 
     }
 
-    // наследовать класс от Actor и наследоваться от него всем актерам, которые draggable??
-    // по примеру сделать для дургих draggable актеров.
-    // дать имена всем группам-актерам вниз по иерархии
-    // очередность прорисовки актеров -> Actor.toFront();
+    @Override
+    protected void childrenChanged() {
+        calculatePos();
+        SnapshotArray<Actor> children = this.getChildren();
+        Actor actor;
+        for (int i = 0; i < children.size; i++) {
+            actor = children.get(i);
+            actor.setPosition(pos.get(i).x, pos.get(i).y);
+        }
+    }
+
+    private void calculatePos() {
+        pos.clear();
+
+        for (int i = 0; i < this.getChildren().size; i++) {
+            pos.add(new Vector2(
+                    i % 2 == 0 ? 30 : 35,
+                    420 - 25 * i
+            ));
+        }
+    }
 
 }
